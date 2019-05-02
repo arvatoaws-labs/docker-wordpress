@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+
+  nginx:
+    build: .
+    restart: always
+    command: dumb-init /usr/sbin/nginx -g 'daemon off;'
+    ports:
+      - 8080:80
+    volumes:
+      - ${PWD}/nginx.conf:/etc/nginx/sites-available/default
+    links:
+      - php-fpm
+      
+  php-fpm:
+    build: .
+    restart: always
+    command: dumb-init /usr/sbin/php-fpm7.2
+    ports:
+      - 9000:9000
+    volumes:
+      - ${PWD}/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
+      - ${PWD}/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'

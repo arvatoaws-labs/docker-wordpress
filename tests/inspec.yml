@@ -1,0 +1,10 @@
+name: lamp
+title: Lamp Profile
+maintainer: Arvato Systems GmbH
+copyright: Arvato Systems GmbH
+copyright_email: cs@bertelsmann.de
+license: Apache-2.0
+summary: InSpec Compliance Profile for Lamp Stacks
+version: 1.0.0
+supports:
+  - platform-family: unix
