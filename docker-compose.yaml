@@ -5,18 +5,20 @@ services:
   nginx:
     build: .
     restart: always
-    command: dumb-init /usr/sbin/nginx -g 'daemon off;'
+    command: /run-nginx.sh
+    user: "33:33"
     ports:
       - 8080:80
     volumes:
-      - ${PWD}/nginx.conf:/etc/nginx/sites-available/default
+      - ${PWD}/nginx.conf:/etc/nginx/nginx.conf
     links:
       - php-fpm
       
   php-fpm:
     build: .
     restart: always
-    command: dumb-init /usr/sbin/php-fpm7.2
+    command: /run-php.sh
+    user: "33:33"
     ports:
       - 9000:9000
     volumes:
@@ -38,3 +40,34 @@ services:
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      
+  install-core:
+    build: .
+    restart: "no"
+    command: /install-core.sh
+    user: "33:33"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+      WORDPRESS_BLOGNAME: toller Blog
+      WORDPRESS_BLOGURL: example.loc
+      WORDPRESS_USERNAME: admin
+      WORDPRESS_PASSWORD: daAfG3423sf
+      WORDPRESS_EMAIL: admin@example.loc
+    links:
+      - mysql      
+      
+  activate-plugins:
+    build: .
+    restart: "no"
+    command: /activate-plugins.sh
+    user: "33:33"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+    links:
+      - mysql            
