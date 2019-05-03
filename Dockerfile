@@ -11,25 +11,13 @@ ARG WP_CORE_VERSION=5.1.1
 ARG WP_PLUGIN_OFFLOAD_VERSION=2.1.1
 ARG WP_PLUGIN_AMAZON_VERSION=1.0.5
 
-ENV APACHE_MIN_CHILDS=1 \
-    APACHE_MAX_CHILDS=50 \
-    APACHE_MIN_CHILDS_SPARE=1 \
-    APACHE_MAX_CHILDS_SPARE=5 \
-    APACHE_SERVER_NAME=wordpress.loc \
-    APACHE_SERVER_ADMIN=webmaster@wordpress.loc \
-    PHP_MAX_POST_SIZE=60M \
-    PHP_MAX_UPLOAD_SIZE=50M \
-    PHP_MAX_UPLOADS=10 \
-    PHP_MAX_EXECUTION_ZIME=30 \
-    MYSQL_DATABASE=wordpress \
+ENV MYSQL_DATABASE=wordpress \
     MYSQL_HOST=localhost \
     MYSQL_PORT=3306 \
     MYSQL_USER=root \
     MYSQL_PASSWORD=secert \
     REDIS_HOST=localhost \
-    REDIS_PORT=6379 \
-    DATA_RESET=false \
-    DATA_MIGRATE=false
+    REDIS_PORT=6379
 
 RUN apt-get update && apt-get install -y \
     php-xml \
@@ -73,6 +61,8 @@ RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP
   unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip && \
   mv amazon-s3-and-cloudfront /app/wp-content/plugins && \
   rm amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip
+
+WORKDIR /app
 
 # ADD run.sh /run.sh
 # ADD reset.sh /reset.sh
