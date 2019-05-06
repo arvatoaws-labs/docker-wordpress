@@ -65,22 +65,18 @@ RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP
 WORKDIR /app
 
 RUN chown -R www-data /var/lib/nginx
+RUN mkdir -p /app/wp-content/uploads && chown -R www-data /app/wp-content/uploads
 
 ADD install-core.sh /install-core.sh
 ADD activate-plugins.sh /activate-plugins.sh
 ADD run-nginx.sh /run-nginx.sh
 ADD run-php.sh /run-php.sh
+ADD run-cron.sh /run-cron.sh
 
-# ADD run.sh /run.sh
-# ADD reset.sh /reset.sh
-# ADD migrate.sh /migrate.sh
 RUN chmod 755 /*.sh
-
-# CMD ["dumb-init", "/run.sh"]
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-# EXPOSE 80/tcp
-# EXPOSE 443/tcp
+USER www-data:www-data
 
-# HEALTHCHECK CMD curl -I 0.0.0.0:80
+#EXPOSE 8080/tcp

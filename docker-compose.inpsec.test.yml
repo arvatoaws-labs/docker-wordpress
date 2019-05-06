@@ -56,9 +56,8 @@ services:
       WORDPRESS_USERNAME: admin
       WORDPRESS_PASSWORD: daAfG3423sf
       WORDPRESS_EMAIL: admin@example.loc
-      SLEEP: 10
     links:
-      - mysql
+      - mysql      
       
   activate-plugins:
     build: .
@@ -70,20 +69,19 @@ services:
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_DATABASE: exampledb
-      SLEEP: 20
     links:
-      - mysql
+      - mysql            
       
-  run-cron:
-    build: .
-    restart: "no"
-    command: /run-cron.sh
-    user: "33:33"
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: exampleuser
-      MYSQL_PASSWORD: examplepass
-      MYSQL_DATABASE: exampledb
-      SLEEP: 30
+  sut:
+    depends_on: 
+    - nginx
+    - php-fpm
+    - mysql
     links:
-      - mysql
+    - nginx
+    - php-fpm
+    - mysql
+    image: chef/inspec
+    volumes:
+     - .:/share/:ro
+    command: exec tests

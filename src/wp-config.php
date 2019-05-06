@@ -62,6 +62,7 @@ $proto = 'http';
 if(isset($_SERVER['HTTPS'])) {
   $proto = 'https';
 }
+
 define('WP_SITEURL', $proto . '://' . $_SERVER['HTTP_HOST']);
 define('WP_HOME', $proto . '://' . $_SERVER['HTTP_HOST']);
 

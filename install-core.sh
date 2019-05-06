@@ -1,8 +1,13 @@
 #!/bin/bash
 set -e
 
-echo "sleeping for 10s..."
-sleep 10
+if [ "$SLEEP" = "" ]
+then
+   echo "starting immediately"
+else
+   echo "sleeping for $SLEEP seconds..."
+   sleep $SLEEP
+fi
 
 cd /app
 

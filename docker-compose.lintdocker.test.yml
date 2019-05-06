@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+
+  sut:
+    image: projectatomic/dockerfile-lint
+    volumes:
+     - .:/root/:ro
+    command:
+     dockerfile_lint -f Dockerfile
