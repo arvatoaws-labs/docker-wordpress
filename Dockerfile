@@ -72,6 +72,9 @@ ADD activate-plugins.sh /activate-plugins.sh
 ADD run-nginx.sh /run-nginx.sh
 ADD run-php.sh /run-php.sh
 ADD run-cron.sh /run-cron.sh
+ADD nginx.conf /etc/nginx/nginx.conf
+ADD fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+ADD fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
 
 RUN chmod 755 /*.sh
 
