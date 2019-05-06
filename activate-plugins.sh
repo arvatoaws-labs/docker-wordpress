@@ -11,6 +11,12 @@ fi
 
 cd /app
 
+echo "waiting for mysql server..."
+while ! mysqladmin ping -h"$MYSQL_HOST" --silent; do
+    sleep 1
+    echo -n .
+done
+
 plugins='amazon-web-services amazon-s3-and-cloudfront'
 
 for plugin in $plugins
