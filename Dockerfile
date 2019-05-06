@@ -77,6 +77,6 @@ RUN chmod 755 /*.sh
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
-USER www-data:www-data
+USER www-data
 
 #EXPOSE 8080/tcp
