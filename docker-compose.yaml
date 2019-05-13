@@ -70,6 +70,7 @@ services:
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_DATABASE: exampledb
+      WP_PLUGINS: "amazon-s3-and-cloudfront"
       SLEEP: 20
     links:
       - mysql

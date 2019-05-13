@@ -52,10 +52,10 @@ RUN mkdir /app && \
 
 ADD src/wp-config.php /app/wp-config.php
 
-RUN wget -q https://downloads.wordpress.org/plugin/amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
-  unzip amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
-  mv amazon-web-services /app/wp-content/plugins && \
-  rm amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip
+# RUN wget -q https://downloads.wordpress.org/plugin/amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
+#   unzip amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
+#   mv amazon-web-services /app/wp-content/plugins && \
+#   rm amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip
 
 RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip && \
   unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip && \
