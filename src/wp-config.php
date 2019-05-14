@@ -59,8 +59,14 @@ if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
  * Handle multi domain into single instance of wordpress installation
  */
 $proto = 'http';
-if(isset($_SERVER['HTTPS'])) {
-  $proto = 'https';
+if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) || (isset($_SERVER['HTTPS']) && $_SERVER['SERVER_PORT'] == 443)) {
+    $proto = 'https';
+    $_SERVER['HTTPS'] = true;
+} elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+    $proto = 'https';
+    $_SERVER['HTTPS'] = true;
+} else {
+    $_SERVER['HTTPS'] = false;
 }
 
 define('WP_SITEURL', $proto . '://' . $_SERVER['HTTP_HOST']);
