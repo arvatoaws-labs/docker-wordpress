@@ -36,6 +36,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     sudo \
     curl \
+    less \
     mysql-client \
     && apt-get upgrade -y \
     && apt-get clean
