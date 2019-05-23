@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     php-zip \
     php-mysql \
     php-redis \
+    php-opcache \
     php-fpm \
     nginx \
     wget \
