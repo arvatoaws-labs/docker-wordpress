@@ -52,7 +52,8 @@ RUN mkdir /app && \
   cd /app && \
   /usr/local/bin/wp core download --allow-root --version=${WP_CORE_VERSION}
 
-ADD src/wp-config.php /app/wp-config.php
+COPY src/wp-config.php /app/wp-config.php
+COPY src/amazon-s3-and-cloudfront-tweaks.php /app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
 
 # RUN wget -q https://downloads.wordpress.org/plugin/amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
 #   unzip amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
@@ -69,14 +70,14 @@ WORKDIR /app
 RUN chown -R www-data /var/lib/nginx
 RUN mkdir -p /app/wp-content/uploads && chown -R www-data /app/wp-content/uploads
 
-ADD install-core.sh /install-core.sh
-ADD activate-plugins.sh /activate-plugins.sh
-ADD run-nginx.sh /run-nginx.sh
-ADD run-php.sh /run-php.sh
-ADD run-cron.sh /run-cron.sh
-ADD nginx.conf /etc/nginx/nginx.conf
-ADD fpm.conf /etc/php/7.2/fpm/php-fpm.conf
-ADD fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
+COPY install-core.sh /install-core.sh
+COPY activate-plugins.sh /activate-plugins.sh
+COPY run-nginx.sh /run-nginx.sh
+COPY run-php.sh /run-php.sh
+COPY run-cron.sh /run-cron.sh
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+COPY fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
 
 RUN chmod 755 /*.sh
 
