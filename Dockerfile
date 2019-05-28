@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ARG DUMB_INIT_VERSION=1.2.2
 ARG WP_CLI_VERSION=2.2.0
-ARG WP_CORE_VERSION=5.1.1
+ARG WP_CORE_VERSION=5.2.1
 ARG WP_PLUGIN_OFFLOAD_VERSION=2.1.1
 ARG WP_PLUGIN_AMAZON_VERSION=1.0.5
 
@@ -54,6 +54,7 @@ RUN mkdir /app && \
 
 COPY src/wp-config.php /app/wp-config.php
 COPY src/amazon-s3-and-cloudfront-tweaks.php /app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
+COPY src/amazon-s3-migrate.php /app/amazon-s3-migrate.php
 
 # RUN wget -q https://downloads.wordpress.org/plugin/amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
 #   unzip amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
@@ -67,11 +68,13 @@ RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP
 
 WORKDIR /app
 
-RUN chown -R www-data /var/lib/nginx
-RUN mkdir -p /app/wp-content/uploads && chown -R www-data /app/wp-content/uploads
+RUN chown -R www-data /var/lib/nginx && \
+    mkdir -p /app/wp-content/uploads && \
+    chown -R www-data /app/wp-content/uploads
 
 COPY install-core.sh /install-core.sh
 COPY activate-plugins.sh /activate-plugins.sh
+COPY migrate-amazon-s3.sh /migrate-amazon-s3.sh
 COPY run-nginx.sh /run-nginx.sh
 COPY run-php.sh /run-php.sh
 COPY run-cron.sh /run-cron.sh

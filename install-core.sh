@@ -29,3 +29,9 @@ sleep 1
 
 echo "verifying wp core checksums..."
 wp core verify-checksums --allow-root
+
+sleep 1
+
+echo "updating admin user settings..."
+wp user update $WORDPRESS_USERNAME --user_pass="$WORDPRESS_PASSWORD" --user_email="$WORDPRESS_EMAIL"
+

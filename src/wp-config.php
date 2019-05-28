@@ -69,6 +69,10 @@ if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTP
     $_SERVER['HTTPS'] = false;
 }
 
+if(!isset($_SERVER['HTTP_HOST'])) {
+    $_SERVER['HTTP_HOST'] = 'localhost';
+}
+
 define('WP_SITEURL', $proto . '://' . $_SERVER['HTTP_HOST']);
 define('WP_HOME', $proto . '://' . $_SERVER['HTTP_HOST']);
 
