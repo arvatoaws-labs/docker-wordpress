@@ -49,10 +49,16 @@ define('AWS_USE_EC2_IAM_ROLE', true);
 define('DISABLE_WP_CRON', 'true');
 
 /*
- * Support for wp cli
+ * Support for wp cli and others
  */
-if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
-    $_SERVER['HTTP_HOST'] = 'wp-cli.org';
+if(!isset($_SERVER['HTTP_HOST'])) {
+    if(getenv('WP_DEFAULT_HOST')) {
+        $_SERVER['HTTP_HOST'] = getenv('WP_DEFAULT_HOST');
+        $_SERVER['SERVER_NAME']  = getenv('WP_DEFAULT_HOST');
+    } elseif (defined( 'WP_CLI' )  && WP_CLI) {
+        $_SERVER['HTTP_HOST'] = 'wp-cli.org';
+        $_SERVER['SERVER_NAME'] = 'wp-cli.org';
+    }
 }
 
 /*
@@ -67,10 +73,6 @@ if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTP
     $_SERVER['HTTPS'] = true;
 } else {
     $_SERVER['HTTPS'] = false;
-}
-
-if(!isset($_SERVER['HTTP_HOST'])) {
-    $_SERVER['HTTP_HOST'] = 'localhost';
 }
 
 define('WP_SITEURL', $proto . '://' . $_SERVER['HTTP_HOST']);
