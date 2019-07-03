@@ -41,7 +41,13 @@ define('DB_COLLATE', '');
 /*
  * Use iam profiles
  */
-define('AWS_USE_EC2_IAM_ROLE', true);
+
+$s3_force_https = true;
+if(!getenv('USE_MINIO')) {
+    define('AWS_USE_EC2_IAM_ROLE', true);
+} else {
+    $s3_force_https = false;
+}
 
 /*
  * Only run cronjobs as real cronjobs in the backend
@@ -107,7 +113,7 @@ define( 'WPOS3_SETTINGS', serialize( array(
     // Organize S3 files into YYYY/MM directories
     'use-yearmonth-folders' => true,
     // Serve files over HTTPS
-    'force-https' => true,
+    'force-https' => $s3_force_https,
     // Remove the local file version once offloaded to S3
     'remove-local-file' => true,
     // Append a timestamped folder to path of files offloaded to S3
