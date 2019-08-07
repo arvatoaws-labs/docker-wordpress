@@ -3,19 +3,27 @@ set -e
 
 if [ "$SLEEP" = "" ]
 then
-   echo "starting immediately"
+  echo "starting immediately"
 else
-   echo "sleeping for $SLEEP seconds..."
-   sleep $SLEEP
+  echo "sleeping for $SLEEP seconds..."
+  sleep $SLEEP
 fi
 
 cd /app
 
 echo "waiting for mysql server..."
 while ! mysqladmin ping -h"$MYSQL_HOST" --silent; do
-    sleep 1
-    echo -n .
+  sleep 1
+  echo -n .
 done
+
+if [ "$MYSQL_ROOT_PASSWORD" = "" ]
+then
+  echo "skipping database creation"
+else
+  mysql -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD -se"CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;"
+  mysql -u$MYSQL_ROOT_USER -p$MYSQL_ROOT_PASSWORD -se"GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* To '$MYSQL_USER@%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+fi
 
 echo "installing wp core if necessary..."
 wp core is-installed --allow-root || wp core install --url="$WORDPRESS_BLOGURL" --title="$WORDPRESS_BLOGNAME" --admin_user="$WORDPRESS_USERNAME" --admin_password="$WORDPRESS_PASSWORD" --admin_email="$WORDPRESS_EMAIL" --skip-email --allow-root
