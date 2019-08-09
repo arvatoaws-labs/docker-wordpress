@@ -3,13 +3,19 @@ set -e
 
 /scripts/sleep.sh
 
-/scripts/wait-for-mysql.sh
+/scripts/wait-for-mysql-root.sh
+
+sleep 1
 
 /scripts/create-mysql-database.sh
 
 sleep 1
 
 /scripts/create-mysql-user.sh
+
+sleep 1
+
+/scripts/wait-for-mysql-user.sh
 
 sleep 1
 

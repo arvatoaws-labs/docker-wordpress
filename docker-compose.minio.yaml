@@ -1,0 +1,114 @@
+version: '3.1'
+
+services:
+
+  nginx:
+    build: .
+    restart: always
+    command: /run-nginx.sh
+    user: "33:33"
+    ports:
+      - 8080:8080
+    volumes:
+      - ${PWD}/nginx.conf:/etc/nginx/nginx.conf
+    links:
+      - php-fpm
+      
+  php-fpm:
+    build: .
+    restart: always
+    command: /run-php.sh
+    user: "33:33"
+    ports:
+      - 9000:9000
+    volumes:
+      - ${PWD}/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
+      - ${PWD}/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+      USE_MINIO: "true"
+      MINIO_HOST: minio
+      MINIO_PORT: 54321
+      MINIO_URL_DOMAIN: localhost:54321
+      AWS_ACCESS_KEY: abcdef
+      AWS_SECRET_KEY: 12345678
+      WP_OFFLOAD_DOMAIN: path
+      WP_OFFLOAD_CLOUDFRONT: localhost:54321
+      WP_OFFLOAD_BUCKET: wordpress
+    links:
+      - mysql
+      - minio
+
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+  
+  minio:
+    image: minio/minio
+    command:
+     - server
+     - --address 
+     - :54321
+     - /data
+    restart: always
+    ports:
+      - 54321:54321
+    environment:
+      MINIO_ACCESS_KEY: abcdef
+      MINIO_SECRET_KEY: 12345678
+
+  install-core:
+    build: .
+    restart: "no"
+    command: /install-core.sh
+    user: "33:33"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+      WORDPRESS_BLOGNAME: toller Blog
+      WORDPRESS_BLOGURL: example.loc
+      WORDPRESS_USERNAME: admin
+      WORDPRESS_PASSWORD: daAfG3423sf
+      WORDPRESS_EMAIL: admin@example.loc
+      SLEEP: 10
+    links:
+      - mysql
+      
+  activate-plugins:
+    build: .
+    restart: "no"
+    command: /activate-plugins.sh
+    user: "33:33"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+      WP_PLUGINS: "amazon-s3-and-cloudfront amazon-s3-and-cloudfront-tweaks"
+      SLEEP: 20
+    links:
+      - mysql
+      
+  run-cron:
+    build: .
+    restart: "no"
+    command: /run-cron.sh
+    user: "33:33"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_DATABASE: exampledb
+      SLEEP: 30
+    links:
+      - mysql
