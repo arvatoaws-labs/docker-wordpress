@@ -6,21 +6,7 @@ then
    exit 1
 fi
 
-if [ "$SLEEP" = "" ]
-then
-   echo "starting immediately"
-else
-   echo "sleeping for $SLEEP seconds..."
-   sleep $SLEEP
-fi
-
 cd /app
-
-echo "waiting for mysql server..."
-while ! mysqladmin ping -h"$MYSQL_HOST" --silent; do
-    sleep 1
-    echo -n .
-done
 
 for plugin in $WP_PLUGINS
 do

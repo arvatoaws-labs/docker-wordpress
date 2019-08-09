@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG DUMB_INIT_VERSION=1.2.2
 ARG WP_CLI_VERSION=2.2.0
 ARG WP_CORE_VERSION=5.2.2
-ARG WP_PLUGIN_OFFLOAD_VERSION=2.2
+ARG WP_PLUGIN_OFFLOAD_VERSION=2.2.1
 ARG WP_PLUGIN_AMAZON_VERSION=1.0.5
 
 ENV MYSQL_DATABASE=wordpress \
@@ -72,17 +72,12 @@ RUN chown -R www-data /var/lib/nginx && \
     mkdir -p /app/wp-content/uploads && \
     chown -R www-data /app/wp-content/uploads
 
-COPY install-core.sh /install-core.sh
-COPY activate-plugins.sh /activate-plugins.sh
-COPY migrate-amazon-s3.sh /migrate-amazon-s3.sh
-COPY run-nginx.sh /run-nginx.sh
-COPY run-php.sh /run-php.sh
-COPY run-cron.sh /run-cron.sh
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY fpm.conf /etc/php/7.2/fpm/php-fpm.conf
-COPY fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
+COPY scripts /scripts
+COPY conf/nginx.conf /etc/nginx/nginx.conf
+COPY conf/fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+COPY conf/fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
 
-RUN chmod 755 /*.sh
+RUN chmod 755 /scripts/*.sh
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 

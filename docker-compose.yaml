@@ -5,12 +5,12 @@ services:
   nginx:
     build: .
     restart: always
-    command: /run-nginx.sh
+    command: /scripts/run-nginx.sh
     user: "33:33"
     ports:
       - 8080:8080
     volumes:
-      - ${PWD}/nginx.conf:/etc/nginx/nginx.conf
+      - ${PWD}/conf/nginx.conf:/etc/nginx/nginx.conf
       - ${PWD}/uploads:/app/wp-content/uploads
     links:
       - php-fpm
@@ -18,13 +18,13 @@ services:
   php-fpm:
     build: .
     restart: always
-    command: /run-php.sh
+    command: /scripts/run-php.sh
     user: "33:33"
     ports:
       - 9000:9000
     volumes:
-      - ${PWD}/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
-      - ${PWD}/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
+      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
+      - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
       - ${PWD}/uploads:/app/wp-content/uploads
     environment:
       MYSQL_HOST: mysql
@@ -43,10 +43,10 @@ services:
       MYSQL_PASSWORD: examplepass
       MYSQL_RANDOM_ROOT_PASSWORD: '1'
 
-  install-core:
+  preinstall-hook:
     build: .
     restart: "no"
-    command: /install-core.sh
+    command: /scripts/preinstall-hook.sh
     user: "33:33"
     environment:
       MYSQL_HOST: mysql
@@ -58,30 +58,35 @@ services:
       WORDPRESS_USERNAME: admin
       WORDPRESS_PASSWORD: daAfG3423sf
       WORDPRESS_EMAIL: admin@example.loc
+      WP_PLUGINS: "hello.php"
       SLEEP: 10
     links:
       - mysql
-      
-  activate-plugins:
+
+  postinstall-hook:
     build: .
     restart: "no"
-    command: /activate-plugins.sh
+    command: /scripts/preinstall-hook.sh
     user: "33:33"
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_DATABASE: exampledb
-      #WP_PLUGINS: "amazon-s3-and-cloudfront amazon-s3-and-cloudfront-tweaks"
+      WORDPRESS_BLOGNAME: toller Blog
+      WORDPRESS_BLOGURL: example.loc
+      WORDPRESS_USERNAME: admin
+      WORDPRESS_PASSWORD: daAfG3423sf
+      WORDPRESS_EMAIL: admin@example.loc
       WP_PLUGINS: "hello.php"
       SLEEP: 20
     links:
-      - mysql
-      
+      - mysql           
+
   run-cron:
     build: .
     restart: "no"
-    command: /run-cron.sh
+    command: /scripts/run-cron.sh
     user: "33:33"
     environment:
       MYSQL_HOST: mysql
