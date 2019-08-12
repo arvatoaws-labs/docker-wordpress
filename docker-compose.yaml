@@ -4,6 +4,7 @@ services:
 
   nginx:
     build: .
+    image: arvato/wordpress
     restart: always
     command: /scripts/run-nginx.sh
     user: "33:33"
@@ -14,17 +15,18 @@ services:
       - ${PWD}/uploads:/app/wp-content/uploads
     links:
       - php-fpm
-      
+
   php-fpm:
     build: .
+    image: arvato/wordpress
     restart: always
     command: /scripts/run-php.sh
     user: "33:33"
     ports:
       - 9000:9000
     volumes:
-      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
-      - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
+      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf
+      - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf
       - ${PWD}/uploads:/app/wp-content/uploads
     environment:
       MYSQL_HOST: mysql
@@ -45,6 +47,7 @@ services:
 
   preinstall-hook:
     build: .
+    image: arvato/wordpress
     restart: "no"
     command: /scripts/preinstall-hook.sh
     user: "33:33"
@@ -65,6 +68,7 @@ services:
 
   postinstall-hook:
     build: .
+    image: arvato/wordpress
     restart: "no"
     command: /scripts/preinstall-hook.sh
     user: "33:33"
@@ -81,10 +85,11 @@ services:
       WP_PLUGINS: "hello.php"
       SLEEP: 20
     links:
-      - mysql           
+      - mysql
 
   run-cron:
     build: .
+    image: arvato/wordpress
     restart: "no"
     command: /scripts/run-cron.sh
     user: "33:33"
