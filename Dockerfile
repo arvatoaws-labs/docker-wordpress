@@ -8,7 +8,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG DUMB_INIT_VERSION=1.2.2
 ARG WP_CLI_VERSION=2.2.0
 ARG WP_CORE_VERSION=5.2.2
-ARG WP_PLUGIN_OFFLOAD_VERSION=2.2.1
+ARG WP_PLUGIN_OFFLOAD_S3_VERSION=2.2.1
+ARG WP_PLUGIN_OFFLOAD_SES_VERSION=1.2.1
 ARG WP_PLUGIN_AMAZON_VERSION=1.0.5
 
 ENV MYSQL_DATABASE=wordpress \
@@ -61,10 +62,15 @@ COPY src/amazon-s3-migrate.php /app/amazon-s3-migrate.php
 #   mv amazon-web-services /app/wp-content/plugins && \
 #   rm amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip
 
-RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip && \
-  unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip && \
+RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
+  unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
   mv amazon-s3-and-cloudfront /app/wp-content/plugins && \
-  rm amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_VERSION}.zip
+  rm amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip
+
+RUN wget -q https://downloads.wordpress.org/plugin/wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
+  unzip wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
+  mv wp-ses /app/wp-content/plugins && \
+  rm wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip
 
 WORKDIR /app
 
