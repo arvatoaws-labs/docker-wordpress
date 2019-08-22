@@ -33,6 +33,7 @@ services:
       MYSQL_USER: exampleuser
       MYSQL_PASSWORD: examplepass
       MYSQL_DATABASE: exampledb
+      WP_PLUGINS: "hello.php"
     links:
       - mysql
 

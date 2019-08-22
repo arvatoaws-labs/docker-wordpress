@@ -3,6 +3,6 @@ set -e
 
 /scripts/sleep.sh
 
-/scripts/wait-for-mysql.sh
+/scripts/wait-for-mysql-user.sh
 
 # tbd
