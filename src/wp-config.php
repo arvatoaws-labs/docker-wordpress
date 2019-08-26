@@ -55,6 +55,14 @@ if(!getenv('USE_MINIO')) {
 define('DISABLE_WP_CRON', 'true');
 
 /*
+ * Force HTTP Host
+ */
+if(getenv('WP_FORCE_HOST')) {
+    $_SERVER['HTTP_HOST'] = getenv('WP_FORCE_HOST');
+    $_SERVER['SERVER_NAME']  = getenv('WP_FORCE_HOST');
+}
+
+/*
  * Support for wp cli and others
  */
 if(!isset($_SERVER['HTTP_HOST'])) {
