@@ -73,6 +73,12 @@ RUN wget -q https://downloads.wordpress.org/plugin/wp-ses.${WP_PLUGIN_OFFLOAD_SE
   mv wp-ses /app/wp-content/plugins && \
   rm wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip
 
+RUN mkdir -p /app/wp-content/languages && \
+  cd /app/wp-content/languages && \
+  wget -q https://downloads.wordpress.org/translation/core/${WP_CORE_VERSION}/de_DE.zip && \
+  unzip de_DE.zip && \
+  rm de_DE.zip
+
 WORKDIR /app
 
 RUN chown -R www-data /var/lib/nginx && \
