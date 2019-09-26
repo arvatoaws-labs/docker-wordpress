@@ -12,13 +12,13 @@ for plugin in $WP_PLUGINS
 do
   echo "activating wp plugin $plugin..."
   
-  PLUGIN_CHECK="$(wp plugin is-installed $plugin)"
+  PLUGIN_CHECK="$(wp plugin is-installed $plugin --debug)"
   if [ $? -eq 0 ]; then
-    PLUGIN_CHECK="$(wp plugin is-active $plugin)"
+    PLUGIN_CHECK="$(wp plugin is-active $plugin --debug)"
     if [ $? -eq 0 ]; then
       echo "error wp plugin $plugin is already active"
     else
-      wp plugin activate $plugin --allow-root
+      wp plugin activate $plugin --allow-root --debug
     fi
   else
     echo "error wp plugin $plugin is not installed"
