@@ -5,11 +5,11 @@
 	[ $status = 0 ]
 }
 
-@test "Check that we get redirected from http to https" {
-    run curl -A bats-test -I http://$WP_DEFAULT_HOST/
-	[ $status = 0 ]
-	[[ $output =~ "301" ]]
-}
+# @test "Check that we get redirected from http to https" {
+#     run curl -A bats-test -I http://$WP_DEFAULT_HOST/
+# 	[ $status = 0 ]
+# 	[[ $output =~ "301" ]]
+# }
 
 @test "Check that we can fetch the startpage" {
     run curl -A bats-test -I https://$WP_DEFAULT_HOST/

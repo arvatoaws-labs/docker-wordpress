@@ -39,52 +39,39 @@ RUN apt-get update && apt-get install -y \
     curl \
     bats \
     less \
-    mysql-client \
-    && apt-get upgrade -y \
-    && apt-get clean
-
-# init
-RUN wget -q https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64.deb && \
-  dpkg -i dumb-init_*.deb && rm dumb-init_*.deb
+    mysql-client && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    wget -q https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64.deb && \
+    dpkg -i dumb-init_*.deb && rm dumb-init_*.deb
 
 RUN wget -q https://github.com/wp-cli/wp-cli/releases/download/v${WP_CLI_VERSION}/wp-cli-${WP_CLI_VERSION}.phar && \
-  chmod 755 wp-cli-${WP_CLI_VERSION}.phar && mv wp-cli-${WP_CLI_VERSION}.phar /usr/local/bin/wp
-
-RUN mkdir /app && \
+  chmod 755 wp-cli-${WP_CLI_VERSION}.phar && mv wp-cli-${WP_CLI_VERSION}.phar /usr/local/bin/wp && \
+  mkdir /app && \
   cd /app && \
-  /usr/local/bin/wp core download --allow-root --version=${WP_CORE_VERSION}
+  /usr/local/bin/wp core download --allow-root --version=${WP_CORE_VERSION} && \
+  wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
+  unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
+  mv amazon-s3-and-cloudfront /app/wp-content/plugins && \
+  rm amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
+  wget -q https://downloads.wordpress.org/plugin/wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
+  unzip wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
+  mv wp-ses /app/wp-content/plugins && \
+  rm wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
+  mkdir -p /app/wp-content/languages && \
+  cd /app/wp-content/languages && \
+  wget -q https://downloads.wordpress.org/translation/core/${WP_CORE_VERSION}/de_DE.zip && \
+  unzip de_DE.zip && \
+  rm de_DE.zip && \
+  chown -R www-data /var/lib/nginx && \
+  mkdir -p /app/wp-content/uploads && \
+  chown -R www-data /app/wp-content/uploads
+
+WORKDIR /app
 
 COPY src/wp-config.php /app/wp-config.php
 COPY src/amazon-s3-and-cloudfront-tweaks.php /app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
 COPY src/amazon-s3-migrate.php /app/amazon-s3-migrate.php
-
-# RUN wget -q https://downloads.wordpress.org/plugin/amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
-#   unzip amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip && \
-#   mv amazon-web-services /app/wp-content/plugins && \
-#   rm amazon-web-services.${WP_PLUGIN_AMAZON_VERSION}.zip
-
-RUN wget -q https://downloads.wordpress.org/plugin/amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
-  unzip amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip && \
-  mv amazon-s3-and-cloudfront /app/wp-content/plugins && \
-  rm amazon-s3-and-cloudfront.${WP_PLUGIN_OFFLOAD_S3_VERSION}.zip
-
-RUN wget -q https://downloads.wordpress.org/plugin/wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
-  unzip wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip && \
-  mv wp-ses /app/wp-content/plugins && \
-  rm wp-ses.${WP_PLUGIN_OFFLOAD_SES_VERSION}.zip
-
-RUN mkdir -p /app/wp-content/languages && \
-  cd /app/wp-content/languages && \
-  wget -q https://downloads.wordpress.org/translation/core/${WP_CORE_VERSION}/de_DE.zip && \
-  unzip de_DE.zip && \
-  rm de_DE.zip
-
-WORKDIR /app
-
-RUN chown -R www-data /var/lib/nginx && \
-    mkdir -p /app/wp-content/uploads && \
-    chown -R www-data /app/wp-content/uploads
-
 COPY scripts /scripts
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/fpm.conf /etc/php/7.2/fpm/php-fpm.conf
