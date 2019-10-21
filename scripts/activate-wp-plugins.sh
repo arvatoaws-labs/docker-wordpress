@@ -6,19 +6,27 @@ then
    exit 1
 fi
 
+WP_CHECK_ARGS="--allow-root --debug"
+WP_ACTIVATE_ARGS="--allow-root --debug"
+
+if [ "$WP_USE_MULTISITE" = "true" ]
+then
+   WP_ACTIVATE_ARGS="$WP_ACTIVATE_ARGS --network"
+fi
+
 cd /app
 
 for plugin in $WP_PLUGINS
 do
   echo "activating wp plugin $plugin..."
-  
-  PLUGIN_CHECK="$(wp plugin is-installed $plugin --debug)"
+
+  PLUGIN_CHECK="$(wp plugin is-installed $plugin $WP_CHECK_ARGS)"
   if [ $? -eq 0 ]; then
-    PLUGIN_CHECK="$(wp plugin is-active $plugin --debug)"
+    PLUGIN_CHECK="$(wp plugin is-active $plugin $WP_CHECK_ARGS)"
     if [ $? -eq 0 ]; then
       echo "error wp plugin $plugin is already active"
     else
-      wp plugin activate $plugin --allow-root --debug
+      wp plugin activate $plugin $WP_ACTIVATE_ARGS
     fi
   else
     echo "error wp plugin $plugin is not installed"

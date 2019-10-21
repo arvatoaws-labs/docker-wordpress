@@ -7,23 +7,32 @@ then
    exit 1
 fi
 
+if [ "$WP_SITE_ID" = "" ]
+then
+   echo "please define WP_SITE_ID"
+   exit 1
+fi
+
 echo "preparing dump file"
 
 INFILE=$WP_IMPORT_DUMP
 TMPFILE=/tmp/tmp.dump
 OUTFILE=/tmp/new.dump
 
-echo "DROP DATABASE IF EXISTS $MYSQL_DATABASE;" > $OUTFILE
-echo "CREATE DATABASE $MYSQL_DATABASE DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;" >> $OUTFILE
-echo "USE $MYSQL_DATABASE;" >> $OUTFILE
+echo "USE $MYSQL_DATABASE;" > $OUTFILE
 
 cp $WP_IMPORT_DUMP $TMPFILE
 
 sed -i -e 's/^CREATE DATABASE /-- CREATE DATABASE /g' $TMPFILE
 sed -i -e 's/^USE /-- USE /g' $TMPFILE
 
+sed -i 's/`wp_/`wp_'$WP_SITE_ID'_/g' $TMPFILE
+
+grep "CREATE TABLE IF NOT EXISTS" $TMPFILE | grep wp_ | awk '{print "DROP TABLE IF EXISTS " $6 ";" }' >> $OUTFILE
+grep "CREATE TABLE" $TMPFILE | grep wp_ | awk '{print "DROP TABLE IF EXISTS " $3 ";" }' >> $OUTFILE
+
 cat $TMPFILE >> $OUTFILE
 
-echo "importing dump file into mysql"
+echo "importing into database"
 
 mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST < $OUTFILE
