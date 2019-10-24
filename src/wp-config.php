@@ -41,11 +41,26 @@ define('DB_COLLATE', '');
 /*
  * Use iam profiles
  */
-
-$s3_force_https = true;
-if(!getenv('USE_MINIO')) {
-    define('AWS_USE_EC2_IAM_ROLE', true);
+if(getenv('AWS_ACCESS_KEY') && getenv('AWS_SECRET_KEY')) {
+    $s3_settings = array(
+        'provider' => 'aws',
+        'access-key-id' => getenv('AWS_ACCESS_KEY'),
+        'secret-access-key' => getenv('AWS_SECRET_KEY'),
+        'use-server-roles' => false
+    );
 } else {
+    define('AWS_USE_EC2_IAM_ROLE', true);
+    $s3_settings = array(
+        'provider' => 'aws',
+        'use-server-roles' => true
+    );
+}
+
+/*
+ * S3 HTTPS handling
+ */
+$s3_force_https = true;
+if(getenv('USE_MINIO')) {
     $s3_force_https = false;
 }
 
@@ -101,7 +116,7 @@ define('WP_HOME', $proto . '://' . $_SERVER['HTTP_HOST']);
 /*
  * WP Offload setting
  */
-define( 'WPOS3_SETTINGS', serialize( array(
+define( 'AS3CF_SETTINGS', serialize( array_merge($s3_settings, array(
     // S3 bucket to upload files
     'bucket' => getenv('WP_OFFLOAD_BUCKET'),
     // S3 bucket region (e.g. 'us-west-1' - leave blank for default region)
@@ -126,7 +141,7 @@ define( 'WPOS3_SETTINGS', serialize( array(
     'remove-local-file' => true,
     // Append a timestamped folder to path of files offloaded to S3
     'object-versioning' => true,
-) ) );
+) ) ) );
 
 /**#@+
  * Authentication Unique Keys and Salts.

@@ -20,10 +20,10 @@ Author URI: https://github.com/arvatoaws
 // **********************************************************************
 
 class Amazon_S3_and_CloudFront_Tweaks {
-    
+
     function __construct() {
         add_filter( 'as3cf_local_domains', array( $this, 'local_domains' ), 10, 1 );
-        
+
         /*
          * Custom S3 API Example: MinIO
          * @see https://min.io/
@@ -77,10 +77,10 @@ class Amazon_S3_and_CloudFront_Tweaks {
         if (getenv('WP_OFFLOAD_LOCAL_DOMAINS')) {
           $domains = array_merge($domains, explode(' ', getenv('WP_OFFLOAD_LOCAL_DOMAINS')));
         }
-        
+
         return $domains;
     }
-    
+
     /*
      * >>> MinIO Examples Start
      */
@@ -213,7 +213,7 @@ class Amazon_S3_and_CloudFront_Tweaks {
      * Note: Only enable this if you are happy with signed URLs and haven't changed the bucket's policy to "Read Only" or similar.
      */
     function minio_upload_acl( $acl ) {
-        return 'private';
+        return 'public-read';
     }
     /**
      * This filter allows you to change the base URL used to take you to the provider's console from WP Offload Media's settings.

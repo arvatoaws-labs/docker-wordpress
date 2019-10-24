@@ -6,7 +6,7 @@ services:
     build: .
     image: arvato/wordpress
     restart: always
-    command: /run-nginx.sh
+    command: /scripts/run-nginx.sh
     user: "33:33"
     ports:
       - 8080:8080
@@ -19,13 +19,15 @@ services:
     build: .
     image: arvato/wordpress
     restart: always
-    command: /run-php.sh
+    command: /scripts/run-php.sh
     user: "33:33"
     ports:
       - 9000:9000
     volumes:
       - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf
       - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf
+#      - ${PWD}/src/wp-config.php:/app/wp-config.php
+#      - ${PWD}/src/amazon-s3-and-cloudfront-tweaks.php:/app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: exampleuser
@@ -37,7 +39,7 @@ services:
       MINIO_URL_DOMAIN: localhost:54321
       AWS_ACCESS_KEY: abcdef
       AWS_SECRET_KEY: 12345678
-      WP_OFFLOAD_DOMAIN: path
+      WP_OFFLOAD_DOMAIN: cloudfront
       WP_OFFLOAD_CLOUDFRONT: localhost:54321
       WP_OFFLOAD_BUCKET: wordpress
     links:
@@ -67,6 +69,32 @@ services:
       MINIO_ACCESS_KEY: abcdef
       MINIO_SECRET_KEY: 12345678
 
+  minio-setup:
+    image: minio/mc
+    restart: on-failure
+    entrypoint: >
+        /bin/sh -c "
+          echo Waiting for minio service to start...;
+          while ! nc -z minio 54321;
+          do
+            sleep 1;
+          done;
+          echo Connected!;
+          mc config host add myminio http://minio:54321 abcdef 12345678;
+          /usr/bin/mc mb myminio/wordpress;
+          /usr/bin/mc policy set download myminio/wordpress;
+          exit 0;
+        "
+    restart: "no"
+    environment:
+      MINIO_ACCESS_KEY: abcdef
+      MINIO_SECRET_KEY: 12345678
+      MINIO_HOST: minio
+      MINIO_PORT: 54321
+      SLEEP: 20
+    links:
+      - minio
+
   preinstall-hook:
     build: .
     image: arvato/wordpress
@@ -83,7 +111,7 @@ services:
       WORDPRESS_USERNAME: admin
       WORDPRESS_PASSWORD: daAfG3423sf
       WORDPRESS_EMAIL: admin@example.loc
-      WP_PLUGINS: "hello.php"
+      WP_PLUGINS: "amazon-s3-and-cloudfront amazon-s3-and-cloudfront-tweaks"
       SLEEP: 10
     links:
       - mysql
@@ -104,7 +132,7 @@ services:
       WORDPRESS_USERNAME: admin
       WORDPRESS_PASSWORD: daAfG3423sf
       WORDPRESS_EMAIL: admin@example.loc
-      WP_PLUGINS: "hello.php"
+      WP_PLUGINS: "amazon-s3-and-cloudfront amazon-s3-and-cloudfront-tweaks"
       SLEEP: 20
     links:
       - mysql
