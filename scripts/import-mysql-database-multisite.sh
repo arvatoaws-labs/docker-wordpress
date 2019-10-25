@@ -27,6 +27,7 @@ sed -i -e 's/^CREATE DATABASE /-- CREATE DATABASE /g' $TMPFILE
 sed -i -e 's/^USE /-- USE /g' $TMPFILE
 
 sed -i 's/`wp_/`wp_'$WP_SITE_ID'_/g' $TMPFILE
+sed -i 's/ENGINE=MyISAM/ENGINE=InnoDB/g' $TMPFILE
 
 grep "CREATE TABLE IF NOT EXISTS" $TMPFILE | grep wp_ | awk '{print "DROP TABLE IF EXISTS " $6 ";" }' >> $OUTFILE
 grep "CREATE TABLE" $TMPFILE | grep wp_ | awk '{print "DROP TABLE IF EXISTS " $3 ";" }' >> $OUTFILE
@@ -35,4 +36,4 @@ cat $TMPFILE >> $OUTFILE
 
 echo "importing into database"
 
-mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST < $OUTFILE
+mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST --default_character_set utf8 < $OUTFILE

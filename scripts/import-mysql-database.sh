@@ -22,8 +22,10 @@ cp $WP_IMPORT_DUMP $TMPFILE
 sed -i -e 's/^CREATE DATABASE /-- CREATE DATABASE /g' $TMPFILE
 sed -i -e 's/^USE /-- USE /g' $TMPFILE
 
+sed -i 's/ENGINE=MyISAM/ENGINE=InnoDB/g' $TMPFILE
+
 cat $TMPFILE >> $OUTFILE
 
 echo "importing dump file into mysql"
 
-mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST < $OUTFILE
+mysql -u$MYSQL_USER -p$MYSQL_PASSWORD -h$MYSQL_HOST --default_character_set utf8 < $OUTFILE
