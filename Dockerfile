@@ -32,6 +32,7 @@ RUN apt-get update && apt-get install -y \
     php-redis \
     php-opcache \
     php-fpm \
+    php-soap \
     nginx \
     wget \
     unzip \
