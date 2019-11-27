@@ -1,0 +1,2 @@
+# ignore subolders/submodules in src folder
+src/**/* 
