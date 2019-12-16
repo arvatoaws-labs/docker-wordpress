@@ -19,7 +19,6 @@
 
 @test "Check that we get the correct content of the startpage" {
     run curl -A bats-test https://$WP_DEFAULT_HOST/
-    [[ $output =~ "doctype html" ]]
     [[ $output =~ "WordPress" ]]
 }
 
