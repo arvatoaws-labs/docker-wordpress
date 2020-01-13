@@ -8,7 +8,7 @@ fi
 
 cd /app
 
-WP_PLUGINS_ACTIVE=$(wp plugin list | grep -v inactive | grep active | cut -f 1)
+WP_PLUGINS_ACTIVE=$(timeout 10s wp plugin list | grep -v inactive | grep active | cut -f 1)
 
 for active_plugin in $WP_PLUGINS_ACTIVE
 do
@@ -22,7 +22,7 @@ do
             continue
     else
             #echo "not found, deleting $active_plugin"
-            wp plugin deactivate $active_plugin --allow-root
+            timeout 15s wp plugin deactivate $active_plugin --allow-root
     fi
   done
 done
