@@ -20,13 +20,13 @@ for plugin in $WP_PLUGINS
 do
   echo "activating wp plugin $plugin..."
 
-  PLUGIN_CHECK="$(wp plugin is-installed $plugin $WP_CHECK_ARGS)"
+  PLUGIN_CHECK="$(timeout 5s wp plugin is-installed $plugin $WP_CHECK_ARGS)"
   if [ $? -eq 0 ]; then
-    PLUGIN_CHECK="$(wp plugin is-active $plugin $WP_CHECK_ARGS)"
+    PLUGIN_CHECK="$(timeout 5s wp plugin is-active $plugin $WP_CHECK_ARGS)"
     if [ $? -eq 0 ]; then
       echo "error wp plugin $plugin is already active"
     else
-      wp plugin activate $plugin $WP_ACTIVATE_ARGS
+      timeout 10s wp plugin activate $plugin $WP_ACTIVATE_ARGS
     fi
   else
     echo "error wp plugin $plugin is not installed"
