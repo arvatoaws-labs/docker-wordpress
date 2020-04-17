@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 LABEL name="wordpress docker container" \
-     version="latest"
+     version="v5.3"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
