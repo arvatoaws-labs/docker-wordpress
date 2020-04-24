@@ -183,9 +183,9 @@ $table_prefix  = 'wp_';
  *
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
-define('WP_DEBUG', getenv('WP_DEBUG') ? 'true' : 'false');
-define('WP_DEBUG_LOG', getenv('WP_DEBUG_LOG') ? 'true' : 'false');
-define('WP_DEBUG_DISPLAY', getenv('WP_DEBUG_LOG') ? 'true' : 'false');
+define('WP_DEBUG', getenv('WP_DEBUG') ? true : false);
+define('WP_DEBUG_LOG', getenv('WP_DEBUG_LOG') ? true : false);
+define('WP_DEBUG_DISPLAY', getenv('WP_DEBUG_LOG') ? true : false);
 
 /* That's all, stop editing! Happy blogging. */
 
