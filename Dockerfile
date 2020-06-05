@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y \
     php-opcache \
     php-fpm \
     php-soap \
+    php-imagick \
     nginx \
     wget \
     unzip \
