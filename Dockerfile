@@ -6,6 +6,7 @@ LABEL name="wordpress docker container" \
 ARG DEBIAN_FRONTEND=noninteractive
 
 ARG DUMB_INIT_VERSION=1.2.2
+ARG WP_SCRIPTS_VERSION=0.9
 
 ENV MYSQL_DATABASE=wordpress \
     MYSQL_HOST=localhost \
@@ -61,12 +62,17 @@ RUN wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     mkdir -p /app/wp-content/uploads && \
     chown -R www-data /app/wp-content/uploads
 
+RUN wget -q https://github.com/arvatoaws-labs/wp-scripts/archive/${WP_SCRIPTS_VERSION}.zip && \
+    unzip ${WP_SCRIPTS_VERSION}.zip && \
+    mv wp-scripts* /scripts && \
+    rm ${WP_SCRIPTS_VERSION}.zip && \
+    mkdir -p WP_CLI_PACKAGES_DIR && \
+    wp package install git@github.com:arvatoaws-labs/wp-arvato-aws-s3-migrator.git --allow-root
+
 WORKDIR /app
 
 COPY src/wp-config.php /app/wp-config.php
 COPY src/amazon-s3-and-cloudfront-tweaks.php /app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
-COPY src/amazon-s3-migrate.php /app/amazon-s3-migrate.php
-COPY scripts /scripts
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/fpm.conf /etc/php/7.2/fpm/php-fpm.conf
 COPY conf/fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
