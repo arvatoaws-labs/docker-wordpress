@@ -14,7 +14,9 @@ ENV MYSQL_DATABASE=wordpress \
     MYSQL_USER=root \
     MYSQL_PASSWORD=secret \
     REDIS_HOST=localhost \
-    REDIS_PORT=6379
+    REDIS_PORT=6379 \
+    WP_CLI_PACKAGES_DIR=/opt/wp-cli-packages
+
 
 RUN apt-get update && apt-get install -y \
     php-xml \
