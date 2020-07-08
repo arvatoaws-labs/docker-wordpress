@@ -70,7 +70,7 @@ RUN wget -q https://github.com/arvatoaws-labs/wp-scripts/archive/${WP_SCRIPTS_VE
     mv wp-scripts* /scripts && \
     rm ${WP_SCRIPTS_VERSION}.zip && \
     mkdir -p WP_CLI_PACKAGES_DIR && \
-    wp package install arvatoaws-labs/wp-arvato-aws-s3-migrator:{WP_S3_MIGRATOR_VERSION} --allow-root
+    wp package install arvatoaws-labs/wp-arvato-aws-s3-migrator:${WP_S3_MIGRATOR_VERSION} --allow-root
 
 WORKDIR /app
 
