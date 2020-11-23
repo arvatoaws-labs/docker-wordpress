@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install -y \
     apt-get clean
 
 ADD det-arch.sh /usr/local/bin
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_`/usr/local/bin/det-arch.sh a a`.deb && \
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_`/usr/local/bin/det-arch.sh a c`.deb && \
     dpkg -i dumb-init_*.deb && rm dumb-init_*.deb
 
 RUN wget -q https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
