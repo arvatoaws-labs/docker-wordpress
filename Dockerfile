@@ -20,7 +20,7 @@ ENV MYSQL_DATABASE=wordpress \
     REDIS_HOST=localhost \
     REDIS_PORT=6379 \
     WP_CLI_PACKAGES_DIR=/opt/wp-cli-packages \
-    WP_S3_MIGRATOR_VERSION=1.0.0
+    WP_S3_MIGRATOR_VERSION=2.3.2
 
 
 RUN apt-get update && apt-get install -y \
