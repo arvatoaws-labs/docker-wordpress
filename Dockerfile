@@ -1,16 +1,16 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 LABEL name="wordpress docker container" \
-     version="5.7.1"
+     version="5.8.1"
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ARG DUMB_INIT_VERSION=1.2.2
+ARG DUMB_INIT_VERSION=1.2.5
 ARG WP_CLI_VERSION=2.4.0
-ARG WP_CORE_VERSION=5.7.1
-ARG WP_PLUGIN_OFFLOAD_S3_VERSION=2.3.2
-ARG WP_PLUGIN_OFFLOAD_SES_VERSION=1.3
-ARG WP_SCRIPTS_VERSION=0.9
+ARG WP_CORE_VERSION=5.8.1
+ARG WP_PLUGIN_OFFLOAD_S3_VERSION=2.5.5
+ARG WP_PLUGIN_OFFLOAD_SES_VERSION=1.4.6
+ARG WP_SCRIPTS_VERSION=0.14
 
 ENV MYSQL_DATABASE=wordpress \
     MYSQL_HOST=localhost \
@@ -83,8 +83,8 @@ WORKDIR /app
 COPY src/wp-config.php /app/wp-config.php
 COPY src/amazon-s3-and-cloudfront-tweaks.php /app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
 COPY conf/nginx.conf /etc/nginx/nginx.conf
-COPY conf/fpm.conf /etc/php/7.2/fpm/php-fpm.conf
-COPY conf/fpm-pool.conf /etc/php/7.2/fpm/pool.d/www.conf
+COPY conf/fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY conf/fpm-pool.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 RUN chmod 755 /scripts/*.sh
 
