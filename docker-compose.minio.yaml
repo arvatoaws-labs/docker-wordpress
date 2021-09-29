@@ -24,8 +24,8 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf
-      - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf
+      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.4/fpm/pool.d/www.conf
+      - ${PWD}/conf/fpm.conf:/etc/php/7.4/fpm/php-fpm.conf
 #      - ${PWD}/src/wp-config.php:/app/wp-config.php
 #      - ${PWD}/src/amazon-s3-and-cloudfront-tweaks.php:/app/wp-content/plugins/amazon-s3-and-cloudfront-tweaks.php
     environment:
