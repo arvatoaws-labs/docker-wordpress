@@ -40,7 +40,7 @@ jobs:
         id: extract_branch
     
       - name: Build and Push MASTER
-        if: ${{ steps.extract_branch.outputs.branch }} === 'master' || ${{ steps.extract_branch.outputs.branch }} === 'main'
+        if: ${{ steps.extract_branch.outputs.branch }} == 'master' || ${{ steps.extract_branch.outputs.branch }} == 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
@@ -51,7 +51,7 @@ jobs:
           cache-to: type=inline
           
       - name: Build and Push Version-branch
-        if: ${{ steps.extract_branch.outputs.branch }} !== 'master' && ${{ steps.extract_branch.outputs.branch }} !== 'main'
+        if: ${{ steps.extract_branch.outputs.branch }} != 'master' && ${{ steps.extract_branch.outputs.branch }} != 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
