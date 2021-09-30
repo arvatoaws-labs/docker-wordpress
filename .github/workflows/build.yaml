@@ -35,12 +35,13 @@ jobs:
           password: ${{ secrets.CR_PAT }}
           
       - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
+        uses: keptn/gh-action-extract-branch-name@main
+        with:
+          GITHUB_REF: ${{ github.ref }}
     
       - name: Build and Push MASTER
-        if: ${{ steps.extract_branch.outputs.branch }} === 'master' || ${{ steps.extract_branch.outputs.branch }} === 'main'
+        if: ${{ steps.extract_branch.outputs.BRANCH }} == 'master' || ${{ steps.extract_branch.outputs.BRANCH }} == 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
@@ -50,13 +51,13 @@ jobs:
           cache-from: type=registry,ref=ghcr.io/arvatoaws-labs/wordpress:latest
           cache-to: type=inline
           
-      - name: Build and Push Version-branch
-        if: ${{ steps.extract_branch.outputs.branch }} !== 'master' && ${{ steps.extract_branch.outputs.branch }} !== 'main'
+      - name: Build and Push Version-Branch
+        if: ${{ steps.extract_branch.outputs.BRANCH }} != 'master' && ${{ steps.extract_branch.outputs.BRANCH }} != 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
           push: true
           pull: true
-          tags: ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.branch }}
-          cache-from: type=registry,ref=ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.branch }}
+          tags: ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.BRANCH }}
+          cache-from: type=registry,ref=ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.BRANCH }}
           cache-to: type=inline
