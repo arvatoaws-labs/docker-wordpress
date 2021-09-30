@@ -34,13 +34,13 @@ jobs:
           username: jenkins-arvato
           password: ${{ secrets.CR_PAT }}
           
-      - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-        id: extract_branch
+      - uses: nelonoel/branch-name@v1.0.1
+    # Use branch name for whatever purpose
+   # - run: echo ${BRANCH_NAME}
+
     
       - name: Build and Push MASTER
-        if: ${{ steps.extract_branch.outputs.branch }} == 'master' || ${{ steps.extract_branch.outputs.branch }} == 'main'
+        if: ${BRANCH_NAME} == 'master' || ${BRANCH_NAME} == 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
@@ -51,12 +51,12 @@ jobs:
           cache-to: type=inline
           
       - name: Build and Push Version-branch
-        if: ${{ steps.extract_branch.outputs.branch }} != 'master' && ${{ steps.extract_branch.outputs.branch }} != 'main'
+        if: ${BRANCH_NAME} != 'master' && ${BRANCH_NAME} != 'main'
         uses: docker/build-push-action@v2
         with:
           platforms: linux/amd64,linux/arm64
           push: true
           pull: true
-          tags: ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.branch }}
-          cache-from: type=registry,ref=ghcr.io/arvatoaws-labs/wordpress:${{ steps.extract_branch.outputs.branch }}
+          tags: ghcr.io/arvatoaws-labs/wordpress:${BRANCH_NAME}
+          cache-from: type=registry,ref=ghcr.io/arvatoaws-labs/wordpress:${BRANCH_NAME}
           cache-to: type=inline
