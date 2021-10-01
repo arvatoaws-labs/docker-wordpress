@@ -14,7 +14,7 @@ added *before* you started using it.
 - Put this file in your WordPress root directory, or where ever the wp-config.php file is.
 - This script does NOT upload any media - you must manually upload the media BEFORE running this script.
 - Place additional configuration options in wp_offload_media_db_migrate.json, and place it in the SAME directory as this script.
-- *Tested on WP 5.0.2, PHP 7.2.11 AND WP Offload Media Lite 2.0.1*
+- *Tested on WP 5.8.1, PHP 7.4.3 AND WP Offload Media Lite 2.5.5*
 
 **** IMPORTANT NOTES REGARDING $purge_amazonS3_info variable ****
 - $purge_amazonS3_info is set to FALSE by default, and this is the recommended setting.

@@ -23,8 +23,8 @@ services:
     ports:
       - 9000:9000
     volumes:
-      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.2/fpm/pool.d/www.conf  
-      - ${PWD}/conf/fpm.conf:/etc/php/7.2/fpm/php-fpm.conf  
+      - ${PWD}/conf/fpm-pool.conf:/etc/php/7.4/fpm/pool.d/www.conf  
+      - ${PWD}/conf/fpm.conf:/etc/php/7.4/fpm/php-fpm.conf  
       - ${PWD}/uploads:/app/wp-content/uploads
     environment:
       MYSQL_HOST: mysql
