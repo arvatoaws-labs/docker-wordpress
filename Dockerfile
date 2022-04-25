@@ -1,4 +1,4 @@
-FROM ghcr.io/arvatoaws-labs/ubuntu:20.04
+FROM ghcr.io/arvatoaws-labs/ubuntu:22.04
 
 LABEL name="wordpress docker container" \
      version="5.8.1"
