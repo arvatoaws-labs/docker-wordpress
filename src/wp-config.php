@@ -152,14 +152,14 @@ define( 'AS3CF_SETTINGS', serialize( array_merge($s3_settings, array(
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         '2c]o5=o@|9>;##[]pI^:.-`_aM_x/ O2[&>47B.raECxz4{9V-r=|gx7i#j-!{/t');
-define('SECURE_AUTH_KEY',  '-{!^|9EluQdYL~~|i>rRe |MQ+m:qp?w#h]#G=B]DcJ/0F&QY6tR+yB{7NZIy?|l');
-define('LOGGED_IN_KEY',    '-/ZhtSWq~.;Zm+#D+PN,c<lI:b]X4+#ui1so|<3c#B@li;-?|R`}/e)F/dE+op5!');
-define('NONCE_KEY',        'hB2#Kq8DdkFFU8(!DEY:Y/P9k+dGsd*:H]Mn,iLi_i+H-V$*PMh65j3=g28*JuAq');
-define('AUTH_SALT',        'dXbM(B)~gHH/wr~fS`1=f~vi =r%-eBNxo|%+a8QUN~6t+>~g+1/>v+<|t}&D&JX');
-define('SECURE_AUTH_SALT', 'W|2E~+2<t{G-sPIL:CCOe-u4}F]/xzf4+,^~B-5/)/:%E4_fKXi/63fUk`Z*H(bV');
-define('LOGGED_IN_SALT',   'Z-BH-MS-jl+kY!uyZ.k[DLdRY&hdp<jd*pJAbvv:Y<^JusUgIZ}Nt~5IyGPt_YWt');
-define('NONCE_SALT',       'FgMc6|.Z$.Wu7G=uQ-#,+jsPz3vg{4A=ynoV14qDGmx?KQNo P->{I?eJYHgj`(2');
+define('AUTH_KEY',         'CHANGEME_AUTH_KEY');
+define('SECURE_AUTH_KEY',  'CHANGEME_SECURE_AUTH_KEY');
+define('LOGGED_IN_KEY',    'CHANGEME_LOGGED_IN_KEY');
+define('NONCE_KEY',        'CHANGEME_NONCE_KEY');
+define('AUTH_SALT',        'CHANGEME_AUTH_SALT');
+define('SECURE_AUTH_SALT', 'CHANGEME_SECURE_AUTH_SALT');
+define('LOGGED_IN_SALT',   'CHANGEME_LOGGED_IN_SALT');
+define('NONCE_SALT',       'CHANGEME_NONCE_SALT');
 
 /**#@-*/
 
